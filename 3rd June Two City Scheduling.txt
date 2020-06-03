@@ -1,0 +1,74 @@
+/*  QUESTION
+    
+    There are 2N people a company is planning to interview. The cost of flying the i-th person to city A is           costs[i][0], and the cost of flying the i-th person to city B is costs[i][1].
+
+     Return the minimum cost to fly every person to a city such that exactly N people arrive in each city.
+    */
+
+import java.lang.Math;
+class Solution 
+{
+    public int twoCitySchedCost(int[][] costs) 
+    {
+       int countleft = 0;//maintains number of elements considered from 0th index
+       int countright = 0;//maintains number of elements considered from 1st index
+       int sum = 0; 
+       int max = costs.length/2;//initialized to check if N elements already added
+       ArrayList<Integer> list = new ArrayList<Integer>();
+        
+       TreeMap<Integer, ArrayList<Integer>> map = new TreeMap<Integer, ArrayList<Integer>>(Collections.reverseOrder());//creating tree map in decending order so that the elements whose difference is maximum can be prioritized to add
+       
+        for(int i = 0 ; i < costs.length ; i++)//adding elements in treemap
+        {
+           if(map.containsKey(Math.abs(costs[i][0]-costs[i][1])))
+           {
+                map.get(Math.abs(costs[i][0]-costs[i][1])).add(i);
+           }
+           else
+           {
+                ArrayList<Integer> temp = new ArrayList<Integer>();
+                temp.add(i);
+                map.put(Math.abs(costs[i][0]-costs[i][1]),temp);
+                int s = (map.get(Math.abs(costs[i][0]-costs[i][1]))).size();
+           }
+       }
+        
+        for (Map.Entry<Integer, ArrayList<Integer>> entry : map.entrySet())//iterating treemap
+        {
+            ArrayList<Integer> temp2 = new ArrayList<Integer>();
+            temp2 = entry.getValue();
+            for(int i = 0 ; i < temp2.size(); i++)
+            {
+                int tp = temp2.get(i);
+                
+                if(costs[tp][0]>costs[tp][1])
+                {
+                    if(countright < max)
+                    {
+                        countright++;
+                        sum = sum + costs[tp][1];    
+                    }
+                    else
+                    {
+                        countleft++;
+                        sum = sum + costs[tp][0];
+                    }
+                }
+                else
+                {
+                    if(countleft < max)
+                    {
+                        countleft++;
+                        sum = sum + costs[tp][0];
+                    }
+                    else
+                    {
+                        countright++;
+                        sum = sum + costs[tp][1];    
+                    }
+                }
+            }
+        }
+        return sum;
+    }
+}

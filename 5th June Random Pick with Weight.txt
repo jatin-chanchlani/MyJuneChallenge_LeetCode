@@ -1,0 +1,58 @@
+/*Given an array w of positive integers, where w[i] describes the weight of index i, write a function pickIndex which randomly picks an index in proportion to its weight.
+*/
+import java.util.Random;
+class Solution 
+{
+    float sum = 0;
+    float cummulative[];
+
+    public Solution(int[] w) 
+    {
+        cummulative = new float[w.length];
+        for(int i = 0 ; i < w.length ; i++)
+        {
+            sum = sum + (float)w[i];
+        }
+        cummulative[0] =  ((float)w[0]/sum)*100 - 1;
+        for(int i = 1 ; i < w.length ; i++)
+        {
+            cummulative[i] = ((float)w[i]/sum)*100 + cummulative[i-1];//cumulative probability is calculated
+        }
+        
+    }
+    public int pickIndex() 
+    {   
+        Random rand = new Random();
+        int random_number = rand.nextInt(100);
+        int temp = 0;
+        int i = cummulative.length - 2;
+        if(i==-1)//only single number
+        {
+            return (0);
+        }
+        while(true)
+        {       
+            if(random_number > (int)cummulative[i])
+            {
+                temp = i+1;
+                break;
+            }
+            else if(i==0)
+            {
+                temp = i;
+                break;
+            }
+            else
+            {
+                i--;
+            }   
+        }
+        return temp;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(w);
+ * int param_1 = obj.pickIndex();
+ */

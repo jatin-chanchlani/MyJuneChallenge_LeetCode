@@ -1,0 +1,50 @@
+/*Suppose you have a random list of people standing in a queue. Each person is described by a pair of integers (h, k), where h is the height of the person and k is the number of people in front of this person who have a height greater than or equal to h. Write an algorithm to reconstruct the queue.*/
+
+//Will Update a better Solution Soon!
+
+class Solution 
+{
+    public int[][] reconstructQueue(int[][] people) 
+    {
+        int count[] = new int[people.length];
+        int soln[][] = new int[people.length][2];
+        int flag[] = new int[people.length];
+        int sol = 0;
+        for(int i = 0 ; i < people.length  ; i++)
+        {
+            int m = 0;
+            int tp = 0;
+            boolean bool = false;
+            boolean fl= false;
+            
+            while(m < people.length)
+            {
+                if(people[m][1]==count[m] && flag[m]!=1)
+                {
+                    if(people[tp][0]>=people[m][0] || !fl)
+                    {
+                        tp = m;
+                        fl = true;
+                        bool = true;
+                    }
+                }
+                m++;
+            }
+            if(bool)
+            {
+                soln[sol][0] = people[tp][0];
+                soln[sol][1] = people[tp][1];
+                sol++;
+                flag[tp] = 1;
+                for(int j = 0 ; j < people.length ; j++)
+                {
+                    if(flag[j]!=1 && people[tp][0]>=people[j][0])
+                    {
+                        count[j]++;       
+                    }
+                }
+            }            
+        }
+        return soln;
+    }
+}

@@ -1,0 +1,27 @@
+/*
+You are given coins of different denominations and a total amount of money. Write a function to compute the number of combinations that make up that amount. You may assume that you have infinite number of each kind of coin.
+*/
+
+/*Tried using recursive, but it gives TLE*/
+
+class Solution 
+{
+    public int change(int amount, int[] coins) 
+    {
+      int arr[][] = new int[coins.length+1][amount+1];
+      arr[0][0] = 1;//for particular case if coins and amount is 0
+        for(int i = 1 ; i <= coins.length ; i++)
+        {
+          arr[i][0] = 1;//for 0 amount also 1 way by default.
+          for(int j = 1 ; j <= amount ; j++)
+          {
+              arr[i][j] = arr[i-1][j];//even if no other way atleast pehle jitne honge.
+              if( j >= coins[i-1] )//current amount needs to be greater than this coin denomination.
+              {
+                  arr[i][j] = arr[i][j] + arr[i][j-coins[i-1]];//basically combinations till now + combinations if this coin is added
+              }
+          }
+      }
+       return arr[coins.length][amount];//itna amount ke liye kitne combinations  
+    }
+}

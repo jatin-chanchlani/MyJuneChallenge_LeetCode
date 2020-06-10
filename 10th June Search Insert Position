@@ -1,0 +1,30 @@
+
+/*Given a sorted array and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+
+You may assume no duplicates in the array.
+*/
+
+class Solution 
+{
+    public int searchInsert(int[] nums, int target) 
+    {
+        int i = 0;
+        while(true)
+        {
+            if(nums[i] > target)//Target does not exist but number greater than target exists
+            {
+                return i;
+            }
+            if(target==nums[i])//Target exists
+            {
+                return i;
+            }
+            else if(i==nums.length-1)//Target does not exist, neither number greater than target exist,hence target will be placed at the end of the array
+            {
+                return (i+1);
+            }
+            
+            i++;
+        }
+    }
+}

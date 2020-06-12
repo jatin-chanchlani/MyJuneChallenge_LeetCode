@@ -1,0 +1,83 @@
+/*
+Design a data structure that supports all following operations in average O(1) time.
+
+
+    insert(val): Inserts an item val to the set if not already present.
+
+    remove(val): Removes an item val from the set if present.
+    
+    getRandom: Returns a random element from current set of elements. Each element must have the same probability                of being returned.
+        
+        */
+
+/* The constraint which makes it a small challenge is O(1) complexity.
+   Removing elements is a challenge as for arraylist remove(Element E ) has O(n).
+   Hence what we do is move last element over the index which is to be deleted and the element to be deleted to      the last index and then deleted last index which can be done in O(1).
+   
+   We need HashMap to store elements(Keys) and its index(values).
+   All the elements are stored in arraylist too!
+*/
+
+class RandomizedSet 
+{
+    HashMap<Integer , Integer> map;
+    ArrayList<Integer> list;
+    
+    /** Initialize your data structure here. */
+    public RandomizedSet() 
+    {
+        map = new HashMap<Integer , Integer>();
+        list = new ArrayList<Integer>();
+    
+    }
+    
+    /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
+    public boolean insert(int val) 
+    {
+        if(map.containsKey(val))//already present
+        {
+            return false;
+        }
+        else
+        {
+            list.add(val);//O(1)
+            map.put(val,list.size()-1);//O(1)
+            return true;
+        }
+    }
+    
+    /** Removes a value from the set. Returns true if the set contained the specified element. */
+    public boolean remove(int val) 
+    {
+        if(map.containsKey(val))
+        {
+            int index = map.get(val);//O(1)
+            // list.remove(val);    //O(n) hence will have to avoid this
+            int temp2 = list.get(list.size()-1);//O(1)
+            list.set(index , temp2);//O(1)
+            list.remove(list.size()-1);//O(1)
+            map.put(temp2,index);//O(1)
+            map.remove(val);//O(1)
+            return true;
+        }
+        else//not present in the data structure
+        {
+            return false;
+        }
+    }
+    
+    /** Get a random element from the set. */
+    public int getRandom() 
+    {
+        Random r = new Random();//random index is generated
+        return (list.get(r.nextInt(list.size())));
+    }
+}
+
+/**
+ * Your RandomizedSet object will be instantiated and called as such:
+ * RandomizedSet obj = new RandomizedSet();
+ * boolean param_1 = obj.insert(val);
+ * boolean param_2 = obj.remove(val);
+ * int param_3 = obj.getRandom();
+ */
